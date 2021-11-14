@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.blind {
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px , 1px , 1px , 1px);
+}
+
+// 폰트
+// @import "./font.scss";
+
+// 공통 CSS
+@import "./reset.scss";
+@import "./vw.scss";
+@import "./common.scss";
+@import "./layout.scss";
