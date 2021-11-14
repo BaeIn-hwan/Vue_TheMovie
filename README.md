@@ -1,2 +1,6 @@
-# theMovie
-Vue.js(Ver.2) + The Movie Database Open API를 이용한 웹 페이지 구현
+# 영화 소개 웹 페이지
+
+기술스택 : HTML5, CSS3, Vue.js(Ver.2)  
+기간 : 2021.11.13 ~ 진행중
+
+
