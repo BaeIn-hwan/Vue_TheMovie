@@ -19,11 +19,13 @@
 					<span>타이틀순</span>
 				</label>
 			</nav>
+
+			{{aaaa}}
 		</div>
 
 		<section class="movie-list__sec">
 			<div class="movie__page-header">
-				<h3 class="blind">영화목록</h3>
+				<h3 class="movie__page__sub-title">영화목록</h3>
 			</div>
 
 			<div class="movie-layout">
@@ -34,7 +36,7 @@
 				<template v-else-if="loading.movieLoading == true">
 					<ul class="movie-layout__box">
 							<li class="movie-layout__list" v-for="(item, index) in movieList" :key="index">
-								<router-link :to="`/MovieDetail/${item.id}`" class="movie-layout__list__link">
+								<a href="#" class="movie-layout__list__link" @click.prevent="moveDetail($event, item.id);">
 									<figure class="movie-layout__list__thumb">
 										<img :src="$store.state.imgURL +'/w300_and_h450_face'+ item.poster_path" :alt="item.title">
 										<span class="movie-layout__list__adult" v-if="item.adult">청불</span>
@@ -51,7 +53,8 @@
 											개봉일 : {{item.release_date}}
 										</span>
 									</div>
-								</router-link>
+								</a>
+								<router-link :to="`/MovieDetail/`" ></router-link>
 
 								<button type="button" class="movie-layout__list__preview">
 									<span class="blind">미리보기</span>
@@ -69,6 +72,8 @@
 </template>
 
 <script>
+import EventBus from "@/eventBus/index.js";
+
 export default {
 	name: 'MovieList',
 	data() {
@@ -83,7 +88,18 @@ export default {
 				}
 			},
 			movieList: [],
+			alert: {
+				isOpen: true,
+				msg: "테스트"
+			}
 		}
+	},
+	computed: {
+		aaaa() {
+			return 1;
+		}
+	},
+	created() {
 	},
 	mounted() {
 		this.requestMovieList();
@@ -109,6 +125,20 @@ export default {
 				this.loading.movieLoading = "error";
 				console.error("error", e);
 			}
+		},
+		moveDetail(e, id) {
+			if (id) {
+				this.$router.push({
+					path: `/MovieDetail/${id}`,
+				});
+			}
+			else {
+				this.alert.msg = "상세 페이지가 없습니다.";
+				EventBus.$emit("open-alert", this.alert);
+			}
+		},
+		test() {
+			
 		}
 	}
 }
@@ -132,21 +162,11 @@ export default {
 	&__sec {
 		margin-top: 35px;
 	}
-
-	.movie-layout {
-		margin-top: 30px;
-
-		&__list {
-			&:nth-child(-n + 4) {
-				margin-top: 0;
-			}
-		}
-	}
 }
 
 .movie-layout {
 	&__box {
-		margin: 0 -20px;
+		margin: -40px -20px 0;
 		font-size: 0;
 	}
 

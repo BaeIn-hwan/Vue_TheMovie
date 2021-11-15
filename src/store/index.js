@@ -19,7 +19,7 @@ export default new Vuex.Store({
         {} : Object
         payload : Object
 
-        comment: API 요청 함수
+      @comment: API 요청 함수
     */
     async requestMethod({state, dispatch}, payload) {
       const {header, method, url, data} = payload;
@@ -52,7 +52,6 @@ export default new Vuex.Store({
 
 				throw({
 					status: response ? response.status : e.status,
-					isCancel: axios.isCancel(e) || null,
 					message: response && response.data ? e.response.data.status_message: e.status_message,
 				});
       }
@@ -63,7 +62,7 @@ export default new Vuex.Store({
         store: Object
         datas: Object
 
-        comment: FormData 객체를 만들어 key/value 데이터 형태로 만들기 위한 함수
+      @comment: FormData 객체를 만들어 key/value 데이터 형태로 만들기 위한 함수
     */
     convertFormData(store, datas) {
       const formData = new FormData();
@@ -80,7 +79,7 @@ export default new Vuex.Store({
         store: Object
         datas: Object
 
-        comment: Method가 GET방식인 경우 URL 뒤에 파라미터 형태로 변경하기 위한 함수
+      @comment: Method가 GET방식인 경우 URL 뒤에 파라미터 형태로 변경하기 위한 함수
     */
     convertGetData(store, datas) {
       let getParams = "";
