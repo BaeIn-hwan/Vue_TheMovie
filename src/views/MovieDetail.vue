@@ -50,16 +50,18 @@
 			<section class="movie-detail__step">
 				<div class="movie-detail__header">
 					<h3 class="movie-detail__header__title">주요 출연진</h3>
-					<button type="button" class="movie-detail__step__btn-more">전체보기 +</button>
+					<button type="button" class="movie-detail__step__btn-more" @click="moreStep($event, moviePeople.id);">
+						전체보기 <font-awesome-icon icon="fa-solid fa-plus" />
+					</button>
 				</div>
 
-				<div class="movie-detail__step__wrapper">
-					<ul class="movie-detail__step__box">
+				<div class="movie-detail__step__wrapper swiper" ref="step-slider">
+					<ul class="movie-detail__step__box swiper-wrapper">
 						<template v-for="(cast, index) in moviePeople.cast">
-							<li class="movie-detail__step__list" :key="index" v-if="index < 10">
+							<li class="movie-detail__step__list swiper-slide" :key="index" v-if="index < 10">
 								<a href="#">
 									<figure class="movie-detail__step__img">
-										<img :src="$store.state.imgURL +'/w200'+ cast.profile_path" :alt="cast.original_name">
+										<img :src="$store.state.imgURL +'/w200'+ cast.profile_path" :alt="cast.original_name" @error="imgError($event);">
 									</figure>
 
 									<div class="movie-detail__step__name">
@@ -73,10 +75,53 @@
 				</div>
 			</section>
 		</template>
+
+		<ModalComponent :title="modal.title" :width="modal.width" :height="modal.height" v-if="modal.isOpen" @modal-close="modal.isOpen = false">
+      <template v-slot:default>
+				<div class="all-step">
+					<section class="all-step__sec">
+						<span class="all-step__title">출연진</span>
+
+						<ul class="all-step__box">
+							<li class="all-step__list" v-for="(cast, index) in moviePeople.cast" :key="index">
+								<figure class="all-step__img">
+									<img :src="$store.state.imgURL +'/w66_and_h66_face'+ cast.profile_path" :alt="cast.original_name" @error="imgError($event);">
+								</figure>
+
+								<div class="all-step__info">
+									<span class="all-step__name">{{cast.original_name}}</span>
+									<span class="all-step__character">{{cast.character}}</span>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section class="all-step__sec">
+						<span class="all-step__title">출연진</span>
+
+						<ul class="all-step__box">
+							<li class="all-step__list" v-for="(crew, index) in moviePeople.crew" :key="index">
+								<figure class="all-step__img">
+									<img :src="$store.state.imgURL +'/w66_and_h66_face'+ crew.profile_path" :alt="crew.original_name" @error="imgError($event);">
+								</figure>
+
+								<div class="all-step__info">
+									<span class="all-step__name">{{crew.original_name}}</span>
+									<span class="all-step__job">{{crew.job}}</span>
+								</div>
+							</li>
+						</ul>
+					</section>
+				</div>
+      </template>
+    </ModalComponent>
 	</section>
 </template>
 
 <script>
+import EventBus from "@/eventBus/index.js"
+import common from "@/assets/js/common.js";
+
 export default {
 	name: "MovieDetail",
 	data() {
@@ -90,6 +135,13 @@ export default {
 			},
 			movieInfo: null,
 			moviePeople: null,
+			modalStepMore: null,
+			modal: {
+        width: null,
+        height: null,
+        isOpen: false,
+				title: ""
+      }
 		}
 	},
 	computed: {
@@ -106,6 +158,8 @@ export default {
 		
 	},
 	created() {
+		// EventBus.$on("open-modal", this.modalOpen);
+
 		this.parameters.movieID = this.$route.params.id;
 		this.requestMovieInfo();
 		this.requestMoviePeople();
@@ -150,13 +204,34 @@ export default {
 				if (response && response.data) {
 					this.loading.moviePeopleLoding = true;
 					this.moviePeople = response.data;
-					console.log(this.moviePeople)
 				}
 			}
 			catch(e) {
 				console.error("error", e);
 			}
 		},
+		imgError(e) {
+			common.imgError(e);
+		},
+		moreStep(e, id) {
+			console.log("e", e)
+			console.log("id", id)
+
+			this.modal.isOpen = true;
+			this.modal.title = "출연진 및 제작진";
+		},
+
+		/*
+    @ params
+      payload: Obejct
+
+      커스텀 modal 함수
+    */
+    test(payload) {
+      this.modal.isOpen = payload.isOpen;
+      this.modal.width = payload.width;
+      this.modal.height = payload.height;
+    }
 	},
 }
 </script>
@@ -325,23 +400,14 @@ export default {
 
 		&__list {
 			display: inline-block;
-			width: 200px;
-			margin: 30px 0 0 60px;
+			width: 150px;
 			vertical-align: top;
-
-			&:nth-child(-n + 5) {
-				margin-top: 0;
-			}
-
-			&:nth-child(5n + 1) {
-				margin-left: 0;
-			}
 		}
 
 		&__img {
 			overflow: hidden;
 			position: relative;
-			height: 300px;
+			height: 225px;
 
 			&:before {
 				content: '';
@@ -382,6 +448,75 @@ export default {
 				line-height: 18px;
 			}
 		}
+	}
+}
+
+.all-step {
+	width: 600px;
+	margin: 0 auto;
+	padding: 0 30px;
+
+	&__sec {
+		width: 250px;
+		float: left;
+
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+	}
+
+	&__title {
+		display: block;
+		font: {
+			size: 18px;
+			weight: 600;
+		};
+	}
+
+	&__box {
+		margin-top: 25px;
+	}
+
+	&__list {
+		margin-top: 15px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	&__img {
+		display: inline-block;
+		overflow: hidden;
+		position: relative;
+		width: 66px;
+		height: 66px;
+		vertical-align: middle;
+	}
+
+	&__info {
+		display: inline-block;
+		width: calc(100% - 76px);
+		margin-left: 10px;
+		vertical-align: middle;
+
+		span {
+			display: block;
+		}
+	}
+
+	&__name {
+		margin-bottom: 5px;
+		font-size: 16px;
+		color: #333;
+	}
+
+	&__character,
+	&__job {
+		font-size: 14px;
+		color: #999;
 	}
 }
 </style>

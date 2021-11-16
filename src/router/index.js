@@ -15,10 +15,11 @@ Vue.use(VueRouter);
 */
 
 const routes = [
+  // {
+  //   path: "/",
+  //   redirect: "/MovieList"
+  // },
   {
-    path: "/",
-    redirect: "/MovieList"
-  }, {
     path: '/',
     name: 'Home',
     component: Home

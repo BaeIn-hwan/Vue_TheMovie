@@ -19,8 +19,6 @@
 					<span>타이틀순</span>
 				</label>
 			</nav>
-
-			{{aaaa}}
 		</div>
 
 		<section class="movie-list__sec">
@@ -94,11 +92,6 @@ export default {
 			}
 		}
 	},
-	computed: {
-		aaaa() {
-			return 1;
-		}
-	},
 	created() {
 	},
 	mounted() {
@@ -127,6 +120,10 @@ export default {
 			}
 		},
 		moveDetail(e, id) {
+			if(id == 370172) {
+				id = ""
+			}
+
 			if (id) {
 				this.$router.push({
 					path: `/MovieDetail/${id}`,
@@ -137,9 +134,6 @@ export default {
 				EventBus.$emit("open-alert", this.alert);
 			}
 		},
-		test() {
-			
-		}
 	}
 }
 </script>

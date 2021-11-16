@@ -8,7 +8,8 @@
 
     <Footer/>
 
-    <AlertComponent v-if="alert.isOpen" :message="alert.msg" @alert-close="alert.isOpen = false" />
+    <AlertComponent :message="alert.msg" v-if="alert.isOpen" @alert-close="alert.isOpen = false" />
+    <!-- <ModalComponent :width="modal.width" :height="modal.height" v-if="modal.isOpen" @modal-close="modal.isOpen = false"> -->
   </div>
 </template>
 
@@ -16,24 +17,24 @@
 import EventBus from "@/eventBus/index.js"
 import Header from "@/views/layout/Header.vue";
 import Footer from "@/views/layout/Footer.vue";
-import AlertComponent from "@/components/AlertComponent.vue";
 
 export default {
   components: {
     Header,
     Footer,
-    AlertComponent
   },
   data() {
     return {
       alert: {
         isOpen: false,
         msg: ""
-      }
+      },
+      
     }
   },
   mounted () {
     EventBus.$on("open-alert", this.alertOpen);
+    
   },
   methods: {
     
@@ -41,12 +42,12 @@ export default {
     @ params
       payload: Obejct
 
-      alertDialog 호출 함수
+      커스텀 alert 함수
     */
     alertOpen(payload) {
       this.alert.isOpen = payload.isOpen;
       this.alert.msg = payload.msg;
-    }
+    },
   }
 }
 </script>

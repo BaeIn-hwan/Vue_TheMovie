@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+
 .blind {
   overflow: hidden;
   position: absolute;
@@ -9,7 +10,7 @@
 }
 
 // 폰트
-// @import "./font.scss";
+@import "./font.scss";
 
 // 공통 CSS
 @import "./reset.scss";
