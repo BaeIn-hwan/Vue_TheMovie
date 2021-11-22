@@ -2,6 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import Swiper from 'swiper';
+
+// css
+import '@/assets/scss/_styles.scss'
 
 // fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -23,7 +27,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component("AlertComponent", AlertComponent);
 Vue.component("ModalComponent", ModalComponent);
 
-
+Vue.prototype.Swiper = Swiper;
 Vue.config.productionTip = false;
 /*
   @ 전역 인스턴스 생성 방법

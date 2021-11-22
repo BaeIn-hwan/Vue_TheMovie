@@ -35,7 +35,7 @@
 
 							<li class="movie-detail__etc__list">
 								<span class="movie-detail__etc__title">개봉일</span>
-								<span class="movie-detail__etc__desc">{{movieInfo.release_date}}</span>
+								<span class="movie-detail__etc__desc">{{movieInfo.release_date}}({{movieInfo.production_countries[0].iso_3166_1}})</span>
 							</li>
 						</ul>
 					</div>
@@ -453,17 +453,22 @@ export default {
 
 .all-step {
 	width: 600px;
-	margin: 0 auto;
+	margin: 30px auto 0;
 	padding: 0 30px;
 
-	&__sec {
-		width: 250px;
-		float: left;
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+	}
 
-		&:after {
-			content: '';
-			display: block;
-			clear: both;
+	&__sec {
+		float: left;
+		width: 260px;
+		margin-left: 20px;
+
+		&:first-child {
+			margin-left: 0;
 		}
 	}
 
@@ -494,6 +499,10 @@ export default {
 		width: 66px;
 		height: 66px;
 		vertical-align: middle;
+
+		img {
+			width: 100%;
+		}
 	}
 
 	&__info {
