@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import EventBus from "@/eventBus/index.js"
+// import EventBus from "@/eventBus/index.js"
 import common from "@/assets/js/common.js";
 
 export default {
@@ -148,10 +148,14 @@ export default {
 		korTime() {
 			const minuteRunTime = this.movieInfo.runtime;
 
-			let hours =  Math.floor(minuteRunTime % 3600 / 60),
+			if (minuteRunTime) {
+				let hours =  Math.floor(minuteRunTime % 3600 / 60),
 					minutes = Math.floor(minuteRunTime % 60);
 
-			return `${hours}:${minutes}`;
+				return `${hours}:${minutes}`;
+			} else {
+				return "상영시간이 없습니다.";
+			}
 		}
 	},
 	beforeCreate() {
@@ -500,8 +504,20 @@ export default {
 		height: 66px;
 		vertical-align: middle;
 
+		&:before {
+			display: block;
+			padding-top: 100%;
+		}
+
 		img {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
 			width: 100%;
+			height: auto
 		}
 	}
 

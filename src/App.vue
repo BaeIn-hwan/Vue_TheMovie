@@ -8,7 +8,7 @@
 
     <Footer/>
 
-    <AlertComponent :message="alert.msg" v-if="alert.isOpen" @alert-close="alert.isOpen = false" />
+    <AlertComponent :message="alert.msg" v-if="alert.isOpen" @alert-close="alertClose()" />
     <!-- <ModalComponent :width="modal.width" :height="modal.height" v-if="modal.isOpen" @modal-close="modal.isOpen = false"> -->
   </div>
 </template>
@@ -48,6 +48,10 @@ export default {
       this.alert.isOpen = payload.isOpen;
       this.alert.msg = payload.msg;
     },
+    alertClose() {
+      this.alert.isOpen = false;
+      this.alert.msg = "";
+    }
   }
 }
 </script>

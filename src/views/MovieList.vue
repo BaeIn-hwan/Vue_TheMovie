@@ -1,5 +1,9 @@
 <template>
 	<section class="movie-list">
+		<!--
+			@color 사이트
+			https://www.design-seeds.com/
+		-->
 		<div class="movie__page-header">
 			<h2 class="blind">영화목록</h2>
 
@@ -111,7 +115,7 @@ export default {
 					this.movieList = response.data.results;
 				}
 				else {
-					this.movieList = null;
+					this.movieList = [];
 				}
 			}
 			catch(e) {
