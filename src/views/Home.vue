@@ -1,30 +1,30 @@
 <template>
   <div class="main">
     <!-- 트랜딩 -->
-    <section class="movie-section">
-      <div class="movie-header">
-        <h2 class="movie-title">
+    <section class="main__section movie__section">
+      <div class="movie__header">
+        <h2 class="movie__title">
           <span>TODAY TRENDING</span>
         </h2>
 
-        <div class="movie-filter">
-          <ul class="movie-filter__box">
-            <li class="movie-filter__list">
-              <label class="movie-filter__label">
+        <div class="movie__filter">
+          <ul class="movie__filter__box">
+            <li class="movie__filter__list">
+              <label class="movie__filter__label">
                 <input type="radio" name="trand-filter" class="blind" value="all" v-model="trandType">
                 <span>ALL</span>
               </label>
             </li>
 
-            <li class="movie-filter__list">
-              <label class="movie-filter__label">
+            <li class="movie__filter__list">
+              <label class="movie__filter__label">
                 <input type="radio" name="trand-filter" class="blind" value="movie" v-model="trandType">
                 <span>MOVIE</span>
               </label>
             </li>
 
-            <li class="movie-filter__list">
-              <label class="movie-filter__label">
+            <li class="movie__filter__list">
+              <label class="movie__filter__label">
                 <input type="radio" name="trand-filter" class="blind" value="tv" v-model="trandType">
                 <span>TV</span>
               </label>
@@ -33,90 +33,27 @@
         </div>
       </div>
 
-      <template v-if="loading.trendLoad == false">
-        <div class="movie-item swiper-container skeleton">
-          <ul class="movie-item__box swiper-wrapper">
-            <li class="movie-item__list swiper-slide" v-for="index in 5" :key="index">
-              <a href="#" class="movie-item__link" @click.prevent>
-                <figure class="movie-item__img"></figure>
-
-                <div class="movie-item__info">
-                  <span class="movie-item__info__title"></span>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </template>
-
-      <template v-else-if="loading.trendLoad == true">
-          <div class="movie-item carousel swiper-container" ref="trendSlider">
-            <ul class="movie-item__box swiper-wrapper">
-              <template v-if="trendList && trendList.length">
-                <li class="movie-item__list swiper-slide" v-for="(list, index) in trendList" :key="index">
-                  <a href="#" class="movie-item__link" :data-id="list.id">
-                    <figure class="movie-item__img">
-                      <img :src="$store.state.imgURL +'/w300_and_h450_face'+ list.poster_path" alt="">
-
-                      <template v-if="list.media_type == 'movie' || list.media_type == 'tv'">
-                        <div class="movie-item__badge">
-                          <template v-if="list.media_type == 'movie'">
-                            <span class="movie-item__badge__genre movie-item__badge__genre--movie">MOVIE</span>
-                          </template>
-                          <template v-if="list.media_type == 'tv'">
-                            <span class="movie-item__badge__genre movie-item__badge__genre--tv">TV</span>
-                          </template>
-                        </div>
-                      </template>
-                    </figure>
-
-                    <div class="movie-item__info">
-                      <span class="movie-item__info__title">{{list.title || list.name}}</span>
-                    </div>
-                  </a>
-                </li>
-              </template>
-
-              <template v-else>
-                <li>리스트가 없습니다.</li>
-              </template>
-            </ul>
-
-            <div class="carousel__controller">
-              <button type="button" class="carousel__controller__btn carousel__controller__btn--prev" ref="trendNavPrev">
-                <span class="blind">이전</span>
-              </button>
-
-              <button type="button" class="carousel__controller__btn carousel__controller__btn--next" ref="trendNavNext">
-                <span class="blind">다음</span>
-              </button>
-            </div>
-          </div>
-      </template>
-
-      <template v-else-if="loading.trendLoad == 'error'">
-        에러
-      </template>
+      <SlideItemComponent :itemData="trendList" :loading="loading.trendLoad" ref="trendComponent" />
     </section>
 
     <!-- 인기 -->
-    <section class="movie-section">
-      <div class="movie-header">
-        <h2 class="movie-title">
+    <section class="main__section movie__section">
+      <div class="movie__header">
+        <h2 class="movie__title">
           <span>POPULAR</span>
         </h2>
 
-        <div class="movie-filter">
-          <ul class="movie-filter__box">
-            <li class="movie-filter__list">
-              <label class="movie-filter__label">
+        <div class="movie__filter">
+          <ul class="movie__filter__box">
+            <li class="movie__filter__list">
+              <label class="movie__filter__label">
                 <input type="radio" name="popular-filter" class="blind" value="movie" v-model="popularType">
                 <span>MOVIE</span>
               </label>
             </li>
 
-            <li class="movie-filter__list">
-              <label class="movie-filter__label">
+            <li class="movie__filter__list">
+              <label class="movie__filter__label">
                 <input type="radio" name="popular-filter" class="blind" value="tv" v-model="popularType">
                 <span>TV</span>
               </label>
@@ -125,113 +62,76 @@
         </div>
       </div>
 
-      <template v-if="loading.popularLoad == false">
-        <div class="movie-item swiper-container skeleton">
-          <ul class="movie-item__box swiper-wrapper">
-            <li class="movie-item__list swiper-slide" v-for="index in 5" :key="index">
-              <a href="#" class="movie-item__link" @click.prevent>
-                <figure class="movie-item__img"></figure>
+      <SlideItemComponent :itemData="popularList" :loading="loading.popularLoad" ref="popularComponent" />
+    </section>
 
-                <div class="movie-item__info">
-                  <span class="movie-item__info__title"></span>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </template>
+    <!-- 최신 예고편 -->
+    <section class="main__section movie__section">
+      <div class="movie__header">
+        <h2 class="movie__title">
+          <span>UPCOMING</span>
+        </h2>
+      </div>
 
-      <template v-else-if="loading.popularLoad == true">
-          <div class="movie-item carousel swiper-container" ref="popularSlider">
-            <ul class="movie-item__box swiper-wrapper">
-              <template v-if="popularList && popularList.length">
-                <li class="movie-item__list swiper-slide" v-for="(list, index) in popularList" :key="index">
-                  <a href="#" class="movie-item__link" :data-id="list.id">
-                    <figure class="movie-item__img">
-                      <img :src="$store.state.imgURL +'/w300_and_h450_face'+ list.poster_path" alt="">
-
-                      <template v-if="list.media_type == 'movie' || list.media_type == 'tv'">
-                        <div class="movie-item__badge">
-                          <template v-if="list.media_type == 'movie'">
-                            <span class="movie-item__badge__genre movie-item__badge__genre--movie">MOVIE</span>
-                          </template>
-                          <template v-if="list.media_type == 'tv'">
-                            <span class="movie-item__badge__genre movie-item__badge__genre--tv">TV</span>
-                          </template>
-                        </div>
-                      </template>
-                    </figure>
-
-                    <div class="movie-item__info">
-                      <span class="movie-item__info__title">{{list.title || list.name}}</span>
-                    </div>
-                  </a>
-                </li>
-              </template>
-
-              <template v-else>
-                <li>리스트가 없습니다.</li>
-              </template>
-            </ul>
-
-            <div class="carousel__controller">
-              <button type="button" class="carousel__controller__btn carousel__controller__btn--prev" ref="popularNavPrev">
-                <span class="blind">이전</span>
-              </button>
-
-              <button type="button" class="carousel__controller__btn carousel__controller__btn--next" ref="popularNavNext">
-                <span class="blind">다음</span>
-              </button>
-            </div>
-          </div>
-      </template>
-
-      <template v-else-if="loading.popularLoad == 'error'">
-        에러
-      </template>
+      <SlideItemComponent :itemData="upcomingList" :loading="loading.upcomingLoad" ref="upcomingComponent" />
     </section>
   </div>
 </template>
 
 <script>
+import SlideItemComponent from "@/components/SlideItemComponent.vue";
+
 export default {
   name: 'Home',
+  components: {
+    SlideItemComponent,
+  },
   data() {
     return {
       loading: {
         trendLoad: false,
         popularLoad: false,
+        upcomingLoad: false,
       },
       parameters: {
-        trend: {
+        trendPrams: {
           page: 1,
           language: "ko"
         },
-        popular: {
+        popularPrams: {
           page: 1,
           language: "ko"
         },
+        upcomingPrams: {
+          page: 1,
+          language: "ko"
+        }
       },
       trendList: [],
       trandType: "all",
       popularList: [],
       popularType: "movie",
+      upcomingList: [],
+      upcomingType: "movie",
     }
   },
   mounted() {
     this.getTrendItem();
     this.getPopularItem();
+    this.getUpcomingItem();
   },
   watch: {
     "trandType": {
-      handler(newValue, oldValue) {        
+      handler(newValue, oldValue) {
         this.loading.trendLoad = false;
+         this.$refs.trendComponent.movieSlider.destroy();
         this.getTrendItem();
       }
     },
     "popularType": {
       handler(newValue, oldValue) {
         this.loading.popularLoad = false;
+        this.$refs.popularComponent.movieSlider.destroy();
         this.getPopularItem();
       }
     }
@@ -242,15 +142,15 @@ export default {
         const response = await this.$store.dispatch("requestMethod", {
           method: "GET",
           url: `/trending/${this.trandType}/day`,
-          data: this.parameters.trend
+          data: this.parameters.trendPrams
         });
 
         if (response.data && response.data.results && response.data.results.length) {
           this.loading.trendLoad = true;
           this.trendList = response.data.results;
 
-          this.$nextTick(() => {
-            this.trendSlider();
+          this.$nextTick(function() {
+            this.$refs.trendComponent.itemSlider();
           });
         }
         else {
@@ -268,15 +168,15 @@ export default {
         const response = await this.$store.dispatch("requestMethod", {
           method: "GET",
           url: `/${this.popularType}/popular`,
-          data: this.parameters.popular
+          data: this.parameters.popularPrams
         });
 
         if (response.data && response.data.results && response.data.results.length) {
           this.loading.popularLoad = true;
           this.popularList = response.data.results;
 
-          this.$nextTick(() => {
-            this.popularSlider();
+          this.$nextTick(function() {
+            this.$refs.popularComponent.itemSlider();
           });
         }
         else {
@@ -289,25 +189,43 @@ export default {
       }
     },
 
-    trendSlider() {
-      new this.Swiper(this.$refs["trendSlider"], {
-        slidesPerView: "auto",
-        navigation: {
-          prevEl: this.$refs["trendNavPrev"],
-          nextEl: this.$refs["trendNavNext"]
-        }
-      });
-    },
+    async getUpcomingItem() {
+      try {
+        const response = await this.$store.dispatch("requestMethod", {
+          method: "GET",
+          url: `/movie/upcoming`,
+          data: this.parameters.upcomingPrams
+        });
 
-    popularSlider() {
-      new this.Swiper(this.$refs["popularSlider"], {
-        slidesPerView: "auto",
-        navigation: {
-          prevEl: this.$refs["popularNavPrev"],
-          nextEl: this.$refs["popularNavNext"]
+        if (response.data && response.data.results && response.data.results.length) {
+          this.loading.upcomingLoad = true;
+          this.upcomingList = response.data.results;
+
+          this.$nextTick(function() {
+            this.$refs.upcomingComponent.itemSlider();
+          });
         }
-      });
-    }
+        else {
+          this.upcomingList = [];
+        }
+      }
+      catch(e) {
+        this.loading.upcomingLoad = "error";
+				console.error("error", e);
+      }
+    },
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.main {
+  &__section {
+    margin-top: 80px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+</style>

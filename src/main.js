@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 import Swiper from 'swiper';
 
-// css
+// scss 파일 사용방법
 import '@/assets/scss/_styles.scss'
 
 // fontawesome
@@ -14,11 +14,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* 필요한 아이콘 solid 쪽에 추가 후 아래 library 안에 추가 */
 library.add(faUserSecret, faPlus, faXmark);
 
-
 import AlertComponent from "@/components/AlertComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
-
-
 
 // font-awesome 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

@@ -24,11 +24,11 @@ export default {
       default: "",
     },
     width: {
-      type: Number,
+      type: String || Number,
       default: ""
     },
     height: {
-      type: Number,
+      type: String || Number,
       default: ""
     }
   },

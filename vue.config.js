@@ -1,12 +1,5 @@
+const path = require('path');
+
 module.exports = {
-  lintOnSave: true,
-  css: {
-    loaderOptions: {
-			scss: {
-				prependData: `
-          
-        `, 
-			}
-    }
-  },
+  lintOnSave: false,
 }
