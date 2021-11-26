@@ -21,7 +21,7 @@
         <ul class="movie-item__box">
           <template v-if="itemData && itemData.length">
             <li class="movie-item__list swiper-slide" v-for="(list, index) in itemData" :key="index">
-              <a href="#" class="movie-item__link" @click.prevent="movieDetail($event, list.id);">
+              <router-link :to="`/CategoryDetail/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
                   <img :src="$store.state.imgURL +'/w300_and_h450_face'+ list.poster_path" alt="" @error="imgError($event);">
 
@@ -40,7 +40,7 @@
                 <div class="movie-item__info">
                   <span class="movie-item__info__title">{{list.title || list.name}}</span>
                 </div>
-              </a>
+              </router-link>
             </li>
           </template>
 
@@ -85,20 +85,6 @@ export default {
   mounted() {
   },
   methods: {
-    movieDetail(e, id) {
-      if (id) {
-        /*
-          추후 history api를 사용
-        */
-				this.$router.push({
-					path: `/MovieDetail/${id}`,
-				});
-			}
-			else {
-				this.alert.msg = "상세 페이지가 없습니다.";
-				EventBus.$emit("open-alert", this.alert);
-			}
-    },
     itemSlider() {
       this.movieSlider = new this.Swiper(this.$refs["itemSlider"], {
         slidesPerView: "auto",
@@ -116,160 +102,158 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.movie {
-  &-item {
-    &__wrapper {
-      margin-top: 30px;
+.movie-item {
+  &__wrapper {
+    margin-top: 30px;
+  }
+
+  &__box {
+    font-size: 0;
+  }
+
+  &__list {
+    display: inline-block;
+    width: 236px;
+    margin: 50px 0 0 15px;
+    vertical-align: top;
+
+    &:nth-child(-n + 5) {
+      margin-top: 0;
     }
 
-    &__box {
-      font-size: 0;
+    &:nth-child(5n + 1) {
+      margin-left: 0;
     }
+  }
 
-    &__list {
-      display: inline-block;
-      width: 236px;
-      margin: 50px 0 0 15px;
-      vertical-align: top;
+  &__link {
+    display: block;
+  }
 
-      &:nth-child(-n + 5) {
-        margin-top: 0;
-      }
+  &__img {
+    overflow: hidden;
+    position: relative;
+    font-size: 0;
 
-      &:nth-child(5n + 1) {
-        margin-left: 0;
-      }
-    }
-
-    &__link {
+    &:before {
+      content: '';
       display: block;
+      padding-top: 150%;
     }
 
-    &__img {
+    img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      margin: auto;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    font-size: 0;
+
+    &__genre {
+      display: inline-block;
+      height: 20px;
+      min-width: 60px;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #FFF;
+      line-height: 20px;
+      letter-spacing: -.025em;
+      text-align: center;
+
+      &--movie {
+        background: #df8c70;
+      }
+
+      &--tv {
+        background: #abbce6;
+      }
+    }
+  }
+
+  &__info {
+    margin-top: 14px;
+
+    &__title {
+      display: block;
       overflow: hidden;
-      position: relative;
-      font-size: 0;
+      font: {
+        size: 18px;
+        weight: 500;
+      };
+      color: #FFF;
+      line-height: 27px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__controller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 345px;
+    
+    &__btn {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      width: 40px;
+      height: 40px;
+      transform: translate3d(0, -75%, 0);
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility .35s, opacity .35s, transform .35s;
 
       &:before {
         content: '';
         display: block;
-        padding-top: 150%;
-      }
-
-      img {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
         width: 100%;
-        height: auto;
-        margin: auto;
+        height: 100%;
+        background: rgba(0, 0, 0, .5) url("~@/assets/images/common/ico_comm_controller.png") no-repeat 0 0;
       }
-    }
 
-    &__badge {
-      position: absolute;
-      z-index: 2;
-      bottom: 0;
-      left: 0;
-      font-size: 0;
-
-      &__genre {
-        display: inline-block;
-        height: 20px;
-        min-width: 60px;
-        padding: 0 10px;
-        font-size: 12px;
-        color: #FFF;
-        line-height: 20px;
-        letter-spacing: -.025em;
-        text-align: center;
-
-        &--movie {
-          background: #df8c70;
-        }
-
-        &--tv {
-          background: #abbce6;
+      &.swiper-button-disabled {
+        &:before {
+          opacity: 0.5;
         }
       }
-    }
 
-    &__info {
-      margin-top: 14px;
-
-      &__title {
-        display: block;
-        overflow: hidden;
-        font: {
-          size: 18px;
-          weight: 500;
-        };
-        color: #FFF;
-        line-height: 27px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      &--prev {
+        left: 0;
+        
       }
-    }
 
-    &__controller {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 345px;
-      
-      &__btn {
-        position: absolute;
-        z-index: 2;
-        top: 50%;
-        width: 40px;
-        height: 40px;
-        transform: translate3d(0, -75%, 0);
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility .35s, opacity .35s, transform .35s;
+      &--next {
+        right: 0;
 
         &:before {
-          content: '';
-          display: block;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, .5) url("~@/assets/images/common/ico_comm_controller.png") no-repeat 0 0;
-        }
-
-        &.swiper-button-disabled {
-          &:before {
-            opacity: 0.5;
-          }
-        }
-
-        &--prev {
-          left: 0;
-          
-        }
-
-        &--next {
-          right: 0;
-
-          &:before {
-            background-position: -40px 0;
-          }
+          background-position: -40px 0;
         }
       }
     }
+  }
 
-    .skeleton {
-      .movie-item {
-        &__img {
-          background: #DDD;
-        }
+  .skeleton {
+    .movie-item {
+      &__img {
+        background: #DDD;
+      }
 
-        &__info__title {
-          height: 27px;
-          background: #DDD;
-        }
+      &__info__title {
+        height: 27px;
+        background: #DDD;
       }
     }
   }

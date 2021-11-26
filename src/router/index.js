@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import MovieList from '../views/MovieList.vue';
-import MovieDetail from '../views/MovieDetail.vue';
+import CategoryList from '../views/CategoryList.vue';
+import CategoryDetail from '../views/CategoryDetail.vue';
 
 Vue.use(VueRouter);
 
@@ -24,13 +24,13 @@ const routes = [
     name: 'Home',
     component: Home
   }, {
-    path: '/MovieList',
-    name: 'MovieList',
-    component: MovieList
+    path: '/CategoryList/:id',
+    name: 'CategoryList',
+    component: CategoryList,
   }, {
-    path: '/MovieDetail/:id',
-    name: 'MovieDetail',
-    component: MovieDetail,
+    path: '/CategoryDetail/:id',
+    name: 'CategoryDetail',
+    component: CategoryDetail,
   }
 ];
 

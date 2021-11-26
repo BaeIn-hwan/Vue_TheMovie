@@ -3,28 +3,28 @@
 		<section class="movie__section">
 			<div class="movie__header">
 				<h2 class="movie__title">
-					<span>OO LIST</span>
+					<span>{{listType.toUpperCase()}} LIST</span>
 				</h2>
 
 				<div class="movie__filter">
 					<ul class="movie__filter__box">
 						<li class="movie__filter__list">
 							<label class="movie__filter__label">
-								<input type="radio" class="blind" name="popularFilter" value="popularity.desc">
+								<input type="radio" class="blind" name="popularFilter" value="popularity.desc" v-model="sortBy">
 								<span>인기도순</span>
 							</label>
 						</li>
 
 						<li class="movie__filter__list">
 							<label class="movie__filter__label">
-								<input type="radio" class="blind" name="popularFilter" value="vote_average.desc">
+								<input type="radio" class="blind" name="popularFilter" value="vote_average.desc" v-model="sortBy">
 								<span>평점순</span>
 							</label>
 						</li>
 
 						<li class="movie__filter__list">
 							<label class="movie__filter__label">
-								<input type="radio" class="blind" name="popularFilter" value="title.desc">
+								<input type="radio" class="blind" name="popularFilter" value="title.desc" v-model="sortBy">
 								<span>타이틀순</span>
 							</label>
 						</li>
@@ -33,54 +33,21 @@
 			</div>
 
 			<ListItemComponent :itemData="itemList" :loading="loading.itemListLoading" />
-			<!-- <template v-if="loading.movieLoading == false">
-				<div class="ladoing">로딩중..</div>
-			</template>
 
-			<template v-else-if="loading.movieLoading == true">
-				<ul class="movie-layout__box">
-						<li class="movie-layout__list" v-for="(item, index) in movieList" :key="index">
-							<a href="#" class="movie-layout__list__link" @click.prevent="moveDetail($event, item.id);">
-								<figure class="movie-layout__list__thumb">
-									<img :src="$store.state.imgURL +'/w300_and_h450_face'+ item.poster_path" :alt="item.title">
-									<span class="movie-layout__list__adult" v-if="item.adult">청불</span>
-								</figure>
-
-								<div class="movie-layout__list__info">
-									<span class="movie-layout__list__title">
-										{{item.title}}
-									</span>
-									<p class="movie-layout__list__desc" v-if="false">
-										{{item.overview}}
-									</p>
-									<span class="movie-layout__list__open-date" v-if="false">
-										개봉일 : {{item.release_date}}
-									</span>
-								</div>
-							</a>
-							<router-link :to="`/MovieDetail/`" ></router-link>
-
-							<button type="button" class="movie-layout__list__preview">
-								<span class="blind">미리보기</span>
-							</button>
-						</li>
-				</ul>
-			</template>
-
-			<template v-else-if="loading.movieLoading == 'error'">
-				오류입니다.
-			</template> -->
+			<paginationComponent :pagination="paginations" :disabled="loading.itemListLoading" v-if="itemList && itemList.length" ref="pagination" @movePage="test($event);" />
 		</section>
 	</div>
 </template>
 
 <script>
 import ListItemComponent from "@/components/ListItemComponent.vue";
+import paginationComponent from "@/components/paginationComponent.vue";
 
 export default {
 	name: 'MovieList',
 	components: {
-		ListItemComponent
+		ListItemComponent,
+		paginationComponent
 	},
 	data() {
 		return {
@@ -92,17 +59,46 @@ export default {
 				itemListParam: {
 					language: "ko",
 					page: 1,
+					sort_by: "popularity.desc"
 				}
 			},
 			itemList: [],
+			sortBy: "popularity.desc",
+			paginations: {
+				id: "itemList",
+				current: 1,
+				rowCount: 10,
+				listLength: 20,
+				total: 0,
+			},
 			alert: {
 				isOpen: true,
 				msg: ""
 			}
 		}
 	},
+	created() {
+		console.log(this.$route)
+		this.listType = this.$route.params.id;
+		// this.requestitemList();
+	},
 	mounted() {
-		this.requestitemList();
+		// this.requestitemList();
+	},
+	watch: {
+    $route(to, from) {
+			console.log(123)
+			// this.listType = to.query.type;
+			// this.loading.itemListLoading = false;
+			// this.requestitemList();
+    },
+		"sortBy": {
+			handler(newValue, oldValue) {
+				this.loading.itemListLoading = false;
+				this.parameters.itemListParam.sort_by = newValue;
+				this.requestitemList();
+			}
+		}
 	},
 	methods: {
 		async requestitemList() {
@@ -116,16 +112,29 @@ export default {
 				if (response.data && response.data.results && response.data.results.length) {
 					this.loading.itemListLoading = true;
 					this.itemList = response.data.results;
+					this.paginations.total = response.data.total_results;
 				}
 				else {
 					this.itemList = [];
 				}
+
+				this.$nextTick(function() {
+					this.$refs.pagination.pageInit();
+				});
 			}
 			catch(e) {
 				this.loading.itemListLoading = "error";
 				console.error("error", e);
 			}
 		},
+		test(payload) {
+			const {id, pageNumber} = payload;
+
+			this.loading.itemListLoading = false;
+			this.parameters.itemListParam.page = pageNumber;
+			this.paginations.current = pageNumber;
+			this.requestitemList();
+		}
 	}
 }
 </script>

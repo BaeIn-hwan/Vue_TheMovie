@@ -10,11 +10,11 @@
         <nav class="gnb">
           <ul class="gnb__box">
             <li class="gnb__list">
-							<router-link to="/MovieList" class="gnb__link">MOVIE</router-link>
+							<router-link to="/CategoryList/movie" class="gnb__link">MOVIE</router-link>
             </li>
 
             <li class="gnb__list">
-							<router-link to="/TV" class="gnb__link">TV</router-link>
+							<router-link to="/CategoryList/tv" class="gnb__link">TV</router-link>
             </li>
           </ul>
         </nav>
