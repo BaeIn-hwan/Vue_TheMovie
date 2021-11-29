@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import Swiper from 'swiper';
+import VueLazyload from 'vue-lazyload'
 
 // scss 파일 사용방법
 import '@/assets/scss/_styles.scss'
@@ -17,12 +18,22 @@ library.add(faUserSecret, faPlus, faXmark);
 import AlertComponent from "@/components/AlertComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
 
+// lazyload
+Vue.use(VueLazyload, {
+  preLoad: 1,
+  error: require("@/assets/images/common/img_comm_no-image.jpg"),
+  loading: require("@/assets/images/common/ico_comm_loading.gif"),
+  attempt: 1
+})
+
 // font-awesome 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 // common
 Vue.component("AlertComponent", AlertComponent);
 Vue.component("ModalComponent", ModalComponent);
+
+
 
 Vue.prototype.Swiper = Swiper;
 Vue.config.productionTip = false;

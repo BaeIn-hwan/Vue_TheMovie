@@ -32,9 +32,9 @@
 				</div>
 			</div>
 
-			<ListItemComponent :itemData="itemList" :loading="loading.itemListLoading" />
+			<ListItemComponent :listType="listType" :itemData="viewList" :loading="loading.viewListLoading" />
 
-			<paginationComponent :pagination="paginations" :disabled="loading.itemListLoading" v-if="itemList && itemList.length" ref="pagination" @movePage="test($event);" />
+			<paginationComponent :pagination="paginations" :loading="loading.paginationLoading" v-if="viewList && viewList.length" ref="pagination" @movePage="pagingEvent($event);" />
 		</section>
 	</div>
 </template>
@@ -53,16 +53,17 @@ export default {
 		return {
 			listType: "movie",
 			loading: {
-        itemListLoading: false,
+        viewListLoading: false,
+				paginationLoading: false,
       },
 			parameters: {
-				itemListParam: {
+				viewListParam: {
 					language: "ko",
 					page: 1,
 					sort_by: "popularity.desc"
 				}
 			},
-			itemList: [],
+			viewList: [],
 			sortBy: "popularity.desc",
 			paginations: {
 				id: "itemList",
@@ -78,44 +79,57 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.$route)
-		this.listType = this.$route.params.id;
-		// this.requestitemList();
-	},
-	mounted() {
-		// this.requestitemList();
+		this.listType = this.$route.params.type;
+		this.requestViewList();
 	},
 	watch: {
     $route(to, from) {
-			console.log(123)
-			// this.listType = to.query.type;
-			// this.loading.itemListLoading = false;
-			// this.requestitemList();
+			this.loading.itemListLoading = false;
+			this.listType = to.params.type;
+
+			this.sortBy = "popularity.desc";
+
+			this.parameters.viewListParam = {
+				language: "ko-KR",
+				page: 1,
+				sort_by: "popularity.desc"
+			};
+
+			this.paginations = {
+				id: "viewList",
+				current: 1,
+				rowCount: 10,
+				listLength: 20,
+				total: 0,
+			};
+
+			this.requestViewList();
     },
 		"sortBy": {
 			handler(newValue, oldValue) {
-				this.loading.itemListLoading = false;
+				this.loading.viewListLoading = false;
 				this.parameters.itemListParam.sort_by = newValue;
-				this.requestitemList();
+				this.requestViewList();
 			}
 		}
 	},
 	methods: {
-		async requestitemList() {
+		async requestViewList() {
 			try {
 				const response = await this.$store.dispatch("requestMethod", {
 					method: "GET",
 					url: `/discover/${this.listType}`,
-					data: this.parameters.itemListParam
+					data: this.parameters.viewListParam
 				});
 
 				if (response.data && response.data.results && response.data.results.length) {
-					this.loading.itemListLoading = true;
-					this.itemList = response.data.results;
+					this.loading.viewListLoading = true;
+					this.loading.paginationLoading = true;
+					this.viewList = response.data.results;
 					this.paginations.total = response.data.total_results;
 				}
 				else {
-					this.itemList = [];
+					this.viewList = [];
 				}
 
 				this.$nextTick(function() {
@@ -123,17 +137,18 @@ export default {
 				});
 			}
 			catch(e) {
-				this.loading.itemListLoading = "error";
+				this.loading.viewListLoading = "error";
 				console.error("error", e);
 			}
 		},
-		test(payload) {
+		pagingEvent(payload) {
 			const {id, pageNumber} = payload;
 
-			this.loading.itemListLoading = false;
-			this.parameters.itemListParam.page = pageNumber;
+			this.loading.viewListLoading = false;
+			this.loading.paginationLoading = false;
+			this.parameters.viewListParam.page = pageNumber;
 			this.paginations.current = pageNumber;
-			this.requestitemList();
+			this.requestViewList();
 		}
 	}
 }

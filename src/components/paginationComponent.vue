@@ -1,55 +1,62 @@
 <template>
-  <div class="movie-pagination">
-    <button
-      type="button"
-      class="movie-pagination__btn movie-pagination__btn--first"
-      v-if="pagination.rowCount < pageArray.length"
-      :style="pageGroupNum == 1 ? 'visibility: hidden' : ''"
-      @click.prevent="pageMove($event, pagination.rowCount * (pageGroupNum - 1));"
-    >
-      <span class="blind">첫 페이지</span>
-    </button>
-
-    <button
-      type="button"
-      class="movie-pagination__btn movie-pagination__btn--prev"
-      :style="pagination.current == 1 ? 'visibility: hidden' : ''"
-      @click.prevent="pageMove($event, pagination.current - 1);"
-    >
-      <span class="blind">이전 페이지</span>
-    </button>
-
-    <ul class="movie-pagination__box">
-      <li class="movie-pagination__list" v-for="(idx, index) in pageViewArray" :key="index">
-        <a
-          href="#"
-          class="movie-pagination__btn movie-pagination__btn--number"
-          :class="pagination.current == idx ? 'on' : ''"
-          @click.prevent="pageMove($event, idx);"
+  <div>
+    <template v-if="loading == false">
+      test
+    </template>
+    <template v-else-if="loading == true">
+      <div class="movie-pagination">
+        <button
+          type="button"
+          class="movie-pagination__btn movie-pagination__btn--first"
+          v-if="pagination.rowCount < pageArray.length"
+          :style="pageGroupNum == 1 ? 'visibility: hidden' : ''"
+          @click.prevent="pageMove($event, pagination.rowCount * (pageGroupNum - 1));"
         >
-           <span>{{idx}}</span>
-        </a>
-      </li>      
-    </ul>
+          <span class="blind">첫 페이지</span>
+        </button>
 
-    <button
-      type="button"
-      class="movie-pagination__btn movie-pagination__btn--next"
-      :style="pagination.current == pageArray[pageArray.length - 1] ? 'visibility: hidden' : ''"
-      @click.prevent="pageMove($event, pagination.current + 1);"
-    >
-      <span class="blind">다음 페이지</span>
-    </button>
+        <button
+          type="button"
+          class="movie-pagination__btn movie-pagination__btn--prev"
+          :style="pagination.current == 1 ? 'visibility: hidden' : ''"
+          @click.prevent="pageMove($event, pagination.current - 1);"
+        >
+          <span class="blind">이전 페이지</span>
+        </button>
 
-    <button
-      type="button"
-      class="movie-pagination__btn movie-pagination__btn--last"
-      v-if="pagination.rowCount < pageArray.length"
-      :style="pageArray.length / pagination.rowCount == pageGroupNum ? 'visibility: hidden' : ''"
-      @click.prevent="pageMove($event, pagination.rowCount * pageGroupNum + 1);"
-    >
-      <span class="blind">마지막 페이지</span>
-    </button>
+        <ul class="movie-pagination__box">
+          <li class="movie-pagination__list" v-for="(idx, index) in pageViewArray" :key="index">
+            <a
+              href="#"
+              class="movie-pagination__btn movie-pagination__btn--number"
+              :class="pagination.current == idx ? 'on' : ''"
+              @click.prevent="pageMove($event, idx);"
+            >
+              <span>{{idx}}</span>
+            </a>
+          </li>      
+        </ul>
+
+        <button
+          type="button"
+          class="movie-pagination__btn movie-pagination__btn--next"
+          :style="pagination.current == pageArray[pageArray.length - 1] ? 'visibility: hidden' : ''"
+          @click.prevent="pageMove($event, pagination.current + 1);"
+        >
+          <span class="blind">다음 페이지</span>
+        </button>
+
+        <button
+          type="button"
+          class="movie-pagination__btn movie-pagination__btn--last"
+          v-if="pagination.rowCount < pageArray.length"
+          :style="pageArray.length / pagination.rowCount == pageGroupNum ? 'visibility: hidden' : ''"
+          @click.prevent="pageMove($event, pagination.rowCount * pageGroupNum + 1);"
+        >
+          <span class="blind">마지막 페이지</span>
+        </button>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -71,6 +78,10 @@ export default {
       },
       required: true
     },
+    "loading": {
+      type: Boolean,
+      default: false,
+    }
   },
 
   data() {

@@ -21,9 +21,9 @@
         <ul class="movie-item__box swiper-wrapper">
           <template v-if="itemData && itemData.length">
             <li class="movie-item__list swiper-slide" v-for="(list, index) in itemData" :key="index">
-              <router-link :to="`/CategoryDetail/${list.id}`" class="movie-item__link">
+              <router-link :to="`/ViewDetail/${list.media_type}/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
-                  <img :src="$store.state.imgURL +'/w300_and_h450_face'+ list.poster_path" alt="" @error="imgError($event);">
+                  <img alt="" :src="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`">
 
                   <template v-if="list.media_type == 'movie' || list.media_type == 'tv'">
                     <div class="movie-item__badge">

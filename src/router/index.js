@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import CategoryList from '../views/CategoryList.vue';
-import CategoryDetail from '../views/CategoryDetail.vue';
+import ViewList from '../views/ViewList.vue';
+import ViewDetail from '../views/ViewDetail.vue';
 
 Vue.use(VueRouter);
 
@@ -24,13 +24,13 @@ const routes = [
     name: 'Home',
     component: Home
   }, {
-    path: '/CategoryList/:id',
-    name: 'CategoryList',
-    component: CategoryList,
+    path: '/ViewList/:type',
+    name: 'ViewList',
+    component: ViewList,
   }, {
-    path: '/CategoryDetail/:id',
-    name: 'CategoryDetail',
-    component: CategoryDetail,
+    path: '/ViewDetail/:type/:id',
+    name: 'ViewDetail',
+    component: ViewDetail,
   }
 ];
 

@@ -19,22 +19,12 @@
     <template v-else-if="loading == true">
       <div class="movie-item__wrapper">
         <ul class="movie-item__box">
+          
           <template v-if="itemData && itemData.length">
             <li class="movie-item__list swiper-slide" v-for="(list, index) in itemData" :key="index">
-              <router-link :to="`/CategoryDetail/${list.id}`" class="movie-item__link">
+              <router-link :to="`/ViewDetail/${listType}/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
-                  <img :src="$store.state.imgURL +'/w300_and_h450_face'+ list.poster_path" alt="" @error="imgError($event);">
-
-                  <template v-if="list.media_type == 'movie' || list.media_type == 'tv'">
-                    <div class="movie-item__badge">
-                      <template v-if="list.media_type == 'movie'">
-                        <span class="movie-item__badge__genre movie-item__badge__genre--movie">MOVIE</span>
-                      </template>
-                      <template v-if="list.media_type == 'tv'">
-                        <span class="movie-item__badge__genre movie-item__badge__genre--tv">TV</span>
-                      </template>
-                    </div>
-                  </template>
+                  <img :alt="list.title || list.name" v-lazy="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`">
                 </figure>
 
                 <div class="movie-item__info">
@@ -58,12 +48,13 @@
 </template>
 
 <script>
-import EventBus from "@/eventBus/index.js";
-import common from "@/assets/js/common.js";
-
 export default {
   name: "ListItemComponent",
   props: {
+    listType: {
+      type: String,
+      default: 'movie',
+    },
     loading: {
       type: Boolean,
       default: false,
@@ -94,9 +85,6 @@ export default {
         }
       });
     },
-    imgError(e) {
-			common.imgError(e);
-		},
   }
 }
 </script>
@@ -150,6 +138,11 @@ export default {
       width: 100%;
       height: auto;
       margin: auto;
+
+      &[lazy="loading"] {
+        width: 64px;
+        height: 64px;
+      }
     }
   }
 
