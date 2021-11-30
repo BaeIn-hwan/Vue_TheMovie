@@ -84,7 +84,7 @@ export default {
 	},
 	watch: {
     $route(to, from) {
-			this.loading.itemListLoading = false;
+			this.loading.viewListLoading = false;
 			this.listType = to.params.type;
 
 			this.sortBy = "popularity.desc";

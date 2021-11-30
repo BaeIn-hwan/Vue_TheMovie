@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <SlideItemComponent :itemData="trendList" :loading="loading.trendLoad" ref="trendComponent" />
+      <SlideItemComponent :listData="trendList" :loading="loading.trendLoad" ref="trendComponent" />
     </section>
 
     <!-- 인기 -->
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <SlideItemComponent :itemData="popularList" :loading="loading.popularLoad" ref="popularComponent" />
+      <SlideItemComponent :listType="popularType" :listData="popularList" :loading="loading.popularLoad" ref="popularComponent" />
     </section>
 
     <!-- 최신 예고편 -->
@@ -73,7 +73,7 @@
         </h2>
       </div>
 
-      <SlideItemComponent :itemData="upcomingList" :loading="loading.upcomingLoad" ref="upcomingComponent" />
+      <SlideItemComponent :listType="'movie'" :listData="upcomingList" :loading="loading.upcomingLoad" ref="upcomingComponent" />
     </section>
   </div>
 </template>

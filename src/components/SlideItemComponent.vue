@@ -19,18 +19,18 @@
     <template v-else-if="loading == true">
       <div class="movie-item__wrapper swiper-container" ref="itemSlider">
         <ul class="movie-item__box swiper-wrapper">
-          <template v-if="itemData && itemData.length">
-            <li class="movie-item__list swiper-slide" v-for="(list, index) in itemData" :key="index">
-              <router-link :to="`/ViewDetail/${list.media_type}/${list.id}`" class="movie-item__link">
+          <template v-if="listData && listData.length">
+            <li class="movie-item__list swiper-slide" v-for="(list, index) in listData" :key="index">
+              <router-link :to="`/ViewDetail/${list.media_type || listType}/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
                   <img alt="" :src="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`">
 
-                  <template v-if="list.media_type == 'movie' || list.media_type == 'tv'">
+                  <template v-if="(list.media_type == 'movie' || listType == 'movie') || (list.media_type == 'tv' || listType == 'tv')">
                     <div class="movie-item__badge">
-                      <template v-if="list.media_type == 'movie'">
+                      <template v-if="list.media_type == 'movie' || listType == 'movie'">
                         <span class="movie-item__badge__genre movie-item__badge__genre--movie">MOVIE</span>
                       </template>
-                      <template v-if="list.media_type == 'tv'">
+                      <template v-if="list.media_type == 'tv' || listType == 'tv'">
                         <span class="movie-item__badge__genre movie-item__badge__genre--tv">TV</span>
                       </template>
                     </div>
@@ -77,7 +77,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    itemData: {
+    listType: {
+      type: String,
+      default: "movie",
+    },
+    listData: {
       type: Array,
       default: () => []
     }

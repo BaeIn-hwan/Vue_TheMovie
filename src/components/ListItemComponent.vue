@@ -138,11 +138,6 @@ export default {
       width: 100%;
       height: auto;
       margin: auto;
-
-      &[lazy="loading"] {
-        width: 64px;
-        height: 64px;
-      }
     }
   }
 
