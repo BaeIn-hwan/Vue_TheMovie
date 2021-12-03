@@ -32,38 +32,36 @@
 				</div>
 			</div>
 
-			<ListItemComponent :listType="listType" :itemData="viewList" :loading="loading.viewListLoading" />
+			<ListItemComponent :listType="listType" :itemData="mediaList" :loading="loading.mediaListLoading" />
 
-			<paginationComponent :pagination="paginations" :loading="loading.paginationLoading" v-if="viewList && viewList.length" ref="pagination" @movePage="pagingEvent($event);" />
+			<PaginationComponent :pagination="paginations" :loading="loading.paginationLoading" v-if="mediaList && mediaList.length" ref="pagination" @movePage="pagingEvent($event);" />
 		</section>
 	</div>
 </template>
 
 <script>
 import ListItemComponent from "@/components/ListItemComponent.vue";
-import paginationComponent from "@/components/paginationComponent.vue";
 
 export default {
-	name: 'MovieList',
+	name: 'MediaList',
 	components: {
 		ListItemComponent,
-		paginationComponent
 	},
 	data() {
 		return {
 			listType: "movie",
 			loading: {
-        viewListLoading: false,
+        mediaListLoading: false,
 				paginationLoading: false,
       },
 			parameters: {
-				viewListParam: {
+				mediaListParam: {
 					language: "ko",
 					page: 1,
 					sort_by: "popularity.desc"
 				}
 			},
-			viewList: [],
+			mediaList: [],
 			sortBy: "popularity.desc",
 			paginations: {
 				id: "itemList",
@@ -78,58 +76,61 @@ export default {
 			}
 		}
 	},
+
 	created() {
 		this.listType = this.$route.params.type;
-		this.requestViewList();
+		this.requestMediaList();
 	},
+	
 	watch: {
-    $route(to, from) {
-			this.loading.viewListLoading = false;
-			this.listType = to.params.type;
+    $route(newValue) {
+			this.loading.mediaListLoading = false;
+			this.listType = newValue.params.type;
 
 			this.sortBy = "popularity.desc";
 
-			this.parameters.viewListParam = {
+			this.parameters.mediaListParam = {
 				language: "ko-KR",
 				page: 1,
 				sort_by: "popularity.desc"
 			};
 
 			this.paginations = {
-				id: "viewList",
+				id: "mediaList",
 				current: 1,
 				rowCount: 10,
 				listLength: 20,
 				total: 0,
 			};
 
-			this.requestViewList();
+			this.requestMediaList();
     },
 		"sortBy": {
 			handler(newValue, oldValue) {
-				this.loading.viewListLoading = false;
-				this.parameters.itemListParam.sort_by = newValue;
-				this.requestViewList();
+				this.loading.mediaListLoading = false;
+				this.parameters.mediaListParam.sort_by = newValue;
+				this.requestMediaList();
 			}
 		}
 	},
+	
 	methods: {
-		async requestViewList() {
+		async requestMediaList() {
 			try {
 				const response = await this.$store.dispatch("requestMethod", {
 					method: "GET",
 					url: `/discover/${this.listType}`,
-					data: this.parameters.viewListParam
+					data: this.parameters.mediaListParam
 				});
 
 				if (response.data && response.data.results && response.data.results.length) {
-					this.loading.viewListLoading = true;
+					this.loading.mediaListLoading = true;
 					this.loading.paginationLoading = true;
-					this.viewList = response.data.results;
+					this.mediaList = response.data.results;
 					this.paginations.total = response.data.total_results;
 				}
 				else {
-					this.viewList = [];
+					this.mediaList = [];
 				}
 
 				this.$nextTick(function() {
@@ -137,18 +138,18 @@ export default {
 				});
 			}
 			catch(e) {
-				this.loading.viewListLoading = "error";
+				this.loading.mediaListLoading = "error";
 				console.error("error", e);
 			}
 		},
 		pagingEvent(payload) {
 			const {id, pageNumber} = payload;
 
-			this.loading.viewListLoading = false;
+			this.loading.mediaListLoading = false;
 			this.loading.paginationLoading = false;
-			this.parameters.viewListParam.page = pageNumber;
+			this.parameters.mediaListParam.page = pageNumber;
 			this.paginations.current = pageNumber;
-			this.requestViewList();
+			this.requestMediaList();
 		}
 	}
 }

@@ -79,13 +79,10 @@
 </template>
 
 <script>
-import SlideItemComponent from "@/components/SlideItemComponent.vue";
+
 
 export default {
   name: 'Home',
-  components: {
-    SlideItemComponent,
-  },
   data() {
     return {
       loading: {

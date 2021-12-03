@@ -10,9 +10,11 @@ export default new Vuex.Store({
     imgURL: "https://image.tmdb.org/t/p",
     apiKey: "4e9b730dfa3a8151bfa85efa7f4685b1",
   },
+
   getters: {
 
   },
+  
   actions: {
     /*
       @params

@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper" id="wrapper">
-    <Header/>
+    <Header />
 
     <main class="container" id="container">
       <router-view/>
     </main>
 
-    <Footer/>
+    <Footer />
 
     <AlertComponent :message="alert.msg" v-if="alert.isOpen" @alert-close="alertClose()" />
     <!-- <ModalComponent :width="modal.width" :height="modal.height" v-if="modal.isOpen" @modal-close="modal.isOpen = false"> -->

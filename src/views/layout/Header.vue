@@ -10,11 +10,11 @@
         <nav class="gnb">
           <ul class="gnb__box">
             <li class="gnb__list">
-							<router-link to="/ViewList/movie" class="gnb__link">MOVIE</router-link>
+							<router-link to="/movie/MediaList" class="gnb__link">MOVIE</router-link>
             </li>
 
             <li class="gnb__list">
-							<router-link to="/ViewList/tv" class="gnb__link">TV</router-link>
+							<router-link to="/tv/MediaList" class="gnb__link">TV</router-link>
             </li>
           </ul>
         </nav>
@@ -26,9 +26,8 @@
 export default {
 	data() {
 		return {
-			
 		}
-	}
+	},
 }
 </script>
 

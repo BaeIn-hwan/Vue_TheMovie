@@ -19,10 +19,9 @@
     <template v-else-if="loading == true">
       <div class="movie-item__wrapper">
         <ul class="movie-item__box">
-          
           <template v-if="itemData && itemData.length">
             <li class="movie-item__list swiper-slide" v-for="(list, index) in itemData" :key="index">
-              <router-link :to="`/ViewDetail/${listType}/${list.id}`" class="movie-item__link">
+              <router-link :to="`/${listType}/MediaDetail/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
                   <img :alt="list.title || list.name" v-lazy="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`">
                 </figure>
@@ -64,6 +63,7 @@ export default {
       default: () => []
     }
   },
+  
   data() {
     return {
       movieSlider: null,
@@ -73,18 +73,11 @@ export default {
 			}
     }
   },
+
   mounted() {
   },
+
   methods: {
-    itemSlider() {
-      this.movieSlider = new this.Swiper(this.$refs["itemSlider"], {
-        slidesPerView: "auto",
-        navigation: {
-          prevEl: this.$refs["itemNavPrev"],
-          nextEl: this.$refs["itemNavNext"]
-        }
-      });
-    },
   }
 }
 </script>

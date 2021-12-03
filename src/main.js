@@ -6,7 +6,7 @@ import Swiper from 'swiper';
 import VueLazyload from 'vue-lazyload'
 
 // scss 파일 사용방법
-import '@/assets/scss/_styles.scss'
+// import '@/assets/scss/_styles.scss'
 
 // fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -17,6 +17,8 @@ library.add(faUserSecret, faPlus, faXmark);
 
 import AlertComponent from "@/components/AlertComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
+import SlideItemComponent from "@/components/SlideItemComponent.vue";
+import PaginationComponent from "@/components/paginationComponent.vue";
 
 // lazyload
 Vue.use(VueLazyload, {
@@ -32,7 +34,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 // common
 Vue.component("AlertComponent", AlertComponent);
 Vue.component("ModalComponent", ModalComponent);
-
+Vue.component("PaginationComponent", PaginationComponent);
+Vue.component("SlideItemComponent", SlideItemComponent);
 
 
 Vue.prototype.Swiper = Swiper;

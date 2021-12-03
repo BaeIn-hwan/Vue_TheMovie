@@ -21,9 +21,9 @@
         <ul class="movie-item__box swiper-wrapper">
           <template v-if="listData && listData.length">
             <li class="movie-item__list swiper-slide" v-for="(list, index) in listData" :key="index">
-              <router-link :to="`/ViewDetail/${list.media_type || listType}/${list.id}`" class="movie-item__link">
+              <router-link :to="`/${list.media_type || listType}/MediaDetail/${list.id}`" class="movie-item__link">
                 <figure class="movie-item__img">
-                  <img alt="" :src="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`">
+                  <img v-lazy="`${$store.state.imgURL}/w300_and_h450_face${list.poster_path}`" alt="">
 
                   <template v-if="(list.media_type == 'movie' || listType == 'movie') || (list.media_type == 'tv' || listType == 'tv')">
                     <div class="movie-item__badge">
@@ -49,7 +49,7 @@
           </template>
         </ul>
 
-        <div class="movie-item__controller">
+        <div class="movie-item__controller" v-if="5 < listData.length">
           <button type="button" class="movie-item__controller__btn movie-item__controller__btn--prev" ref="itemNavPrev">
             <span class="blind">이전</span>
           </button>
@@ -72,6 +72,7 @@ import common from "@/assets/js/common.js";
 
 export default {
   name: "SlideItemComponent",
+
   props: {
     loading: {
       type: Boolean,
@@ -79,13 +80,14 @@ export default {
     },
     listType: {
       type: String,
-      default: "movie",
+      default: "",
     },
     listData: {
       type: Array,
       default: () => []
     }
   },
+
   data() {
     return {
       movieSlider: null,
@@ -95,8 +97,10 @@ export default {
 			}
     }
   },
+
   mounted() {
   },
+
   methods: {
     itemSlider() {
       this.movieSlider = new this.Swiper(this.$refs["itemSlider"], {
