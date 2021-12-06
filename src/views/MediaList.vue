@@ -40,13 +40,9 @@
 </template>
 
 <script>
-import ListItemComponent from "@/components/ListItemComponent.vue";
-
 export default {
 	name: 'MediaList',
-	components: {
-		ListItemComponent,
-	},
+
 	data() {
 		return {
 			listType: "movie",

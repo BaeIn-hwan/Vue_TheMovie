@@ -17,6 +17,7 @@ library.add(faUserSecret, faPlus, faXmark);
 
 import AlertComponent from "@/components/AlertComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
+import ListItemComponent from "@/components/ListItemComponent.vue";
 import SlideItemComponent from "@/components/SlideItemComponent.vue";
 import PaginationComponent from "@/components/paginationComponent.vue";
 
@@ -34,8 +35,9 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 // common
 Vue.component("AlertComponent", AlertComponent);
 Vue.component("ModalComponent", ModalComponent);
-Vue.component("PaginationComponent", PaginationComponent);
+Vue.component("ListItemComponent", ListItemComponent);
 Vue.component("SlideItemComponent", SlideItemComponent);
+Vue.component("PaginationComponent", PaginationComponent);
 
 
 Vue.prototype.Swiper = Swiper;
