@@ -1,8 +1,6 @@
 <template>
   <div>
-    <template v-if="loading == false">
-      test
-    </template>
+    <template v-if="loading == false"></template>
     <template v-else-if="loading == true">
       <div class="movie-pagination">
         <button
