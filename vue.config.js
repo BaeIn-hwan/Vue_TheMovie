@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   lintOnSave: false,
-  publicPath: '/theMovie/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/theMovie/' : '/',
   outputDir: './docs',
   css: {
     loaderOptions: {
@@ -12,5 +12,5 @@ module.exports = {
         ;`,
       },
     }
-  }
+  },
 }
